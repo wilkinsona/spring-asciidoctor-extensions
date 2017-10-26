@@ -17,7 +17,10 @@
 package io.spring.asciidoctor;
 
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.spi.ExtensionRegistry;
+
+import io.spring.asciidoctor.javadoc.JavadocInlineMacroProcessor;
 
 /**
  * {@link ExtensionRegistry} for Spring Asciidoctor extensions.
@@ -28,7 +31,9 @@ public class SpringAsciidoctorExtensionRegistry implements ExtensionRegistry {
 
 	@Override
 	public void register(Asciidoctor asciidoctor) {
-		asciidoctor.javaExtensionRegistry().docinfoProcessor(new CodeBlockSwitchDocinfoProcessor());
+		JavaExtensionRegistry registry = asciidoctor.javaExtensionRegistry();
+		registry.docinfoProcessor(new CodeBlockSwitchDocinfoProcessor());
+		registry.inlineMacro(new JavadocInlineMacroProcessor());
 	}
 
 }
