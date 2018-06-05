@@ -20,7 +20,7 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.extension.spi.ExtensionRegistry;
 
-import io.spring.asciidoctor.javadoc.JavadocInlineMacroProcessor;
+import io.spring.asciidoctor.java.JavaInlineMacroProcessor;
 
 /**
  * {@link ExtensionRegistry} for Spring Asciidoctor extensions.
@@ -33,7 +33,7 @@ public class SpringAsciidoctorExtensionRegistry implements ExtensionRegistry {
 	public void register(Asciidoctor asciidoctor) {
 		JavaExtensionRegistry registry = asciidoctor.javaExtensionRegistry();
 		registry.docinfoProcessor(new CodeBlockSwitchDocinfoProcessor());
-		registry.inlineMacro(new JavadocInlineMacroProcessor());
+		registry.inlineMacro(new JavaInlineMacroProcessor());
 	}
 
 }
