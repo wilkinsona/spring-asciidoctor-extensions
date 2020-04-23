@@ -1,0 +1,23 @@
+[source,indent=0,role="primary category-groovy"]
+.settings.gradle
+----
+Groovy settings
+----
+
+[source,indent=0,role="secondary category-kotlin"]
+.settings.gradle.kts
+----
+Kotlin settings
+----
+
+[source,indent=0,role="primary category-groovy"]
+.build.gradle
+----
+Groovy script
+----
+
+[source,indent=0,role="secondary category-kotlin"]
+.build.gradle.kts
+----
+Kotlin script
+----

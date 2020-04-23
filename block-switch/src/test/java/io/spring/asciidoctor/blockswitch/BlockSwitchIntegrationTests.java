@@ -105,6 +105,22 @@ public class BlockSwitchIntegrationTests {
 	}
 
 	@Test
+	void givenMultipleCategorizedSwitchesWithTheSameOptionsWhenUnselectedItemIsClickedThenAllItemsInThatCategoryBecomeSelected()
+			throws IOException {
+		RemoteWebDriver driver = load("multipleCategorizedSwitchesSameOptions.adoc");
+		List<WebElement> listings = driver.findElementsByCssSelector(".listingblock.primary");
+		assertThat(listings).hasSize(2);
+		assertThat(switchBlock(listings.get(1))).hasSelectedItem("build.gradle").hasUnselectedItems("build.gradle.kts")
+				.hasDisplayedContentContaining("Groovy script");
+		assertThat(switchBlock(listings.get(0))).hasSelectedItem("settings.gradle")
+				.hasUnselectedItems("settings.gradle.kts").hasDisplayedContentContaining("Groovy settings")
+				.uponClicking("settings.gradle.kts").hasSelectedItem("settings.gradle.kts")
+				.hasUnselectedItems("settings.gradle").hasDisplayedContentContaining("Kotlin settings");
+		assertThat(switchBlock(listings.get(1))).hasSelectedItem("build.gradle.kts").hasUnselectedItems("build.gradle")
+				.hasDisplayedContentContaining("Kotlin script");
+	}
+
+	@Test
 	void givenMultipleSwitchesWithDifferentOptionsWhenUnselectedItemIsClickedThenItBecomesSelected()
 			throws IOException {
 		RemoteWebDriver driver = load("multipleSwitchesDifferentOptions.adoc");
@@ -126,6 +142,7 @@ public class BlockSwitchIntegrationTests {
 		String converted = Asciidoctor.Factory.create().convert(
 				new String(Files.readAllBytes(Paths.get("src", "test", "resources", adocFile)), StandardCharsets.UTF_8),
 				options);
+		System.out.println(converted);
 		this.chrome.copyFileToContainer(Transferable.of(converted.getBytes(StandardCharsets.UTF_8)), "/test.html");
 		RemoteWebDriver driver = this.chrome.getWebDriver();
 		driver.get("file:///test.html");

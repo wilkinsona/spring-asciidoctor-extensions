@@ -30,9 +30,16 @@ function findPrimary(secondary) {
 
 function createSwitchItem(block, blockSwitch) {
 	blockName = block.children('.title').text();
-	content = block.children('.content').first().append(block.next('.colist'));
+	category = blockName;
+	$(block).get(0).classList.forEach(function(value) {
+		if (value.startsWith('category-')) {
+			category = value.substring(9);
+		}
+	})
 	item = $('<div class="switch--item">' + blockName + '</div>');
-	blockSwitch.append(item);
+	item.attr('category', category);
+	blockSwitch.append(item);	
+	content = block.children('.content').first().append(block.next('.colist'));
 	return {'item': item, 'content': content};
 }
 
@@ -41,17 +48,17 @@ function globalSwitch() {
 		var blockId = blockIdForSwitchItem($(this));
 		$(this).off('click');
 		$(this).on('click', function() {
-			selectedText = $(this).text()
-			window.localStorage.setItem(blockId, selectedText);
+			selectedCategory = $(this).attr('category');
+			window.localStorage.setItem(blockId, selectedCategory);
 			$(".switch--item").filter(function() {
 				return blockIdForSwitchItem($(this)) === blockId;
 			}).filter(function() {
-				return $(this).text() === selectedText;
+				return $(this).attr('category') === selectedCategory;
 			}).each(function() {
 				select($(this))
 			});
 		});
-		if ($(this).text() === window.localStorage.getItem(blockId)) {
+		if ($(this).attr('category') === window.localStorage.getItem(blockId)) {
 			select($(this))
 		}
 	});
@@ -59,9 +66,9 @@ function globalSwitch() {
 
 function blockIdForSwitchItem(item) {
 	idComponents = []
-	idComponents.push(item.text().toLowerCase());
+	idComponents.push(item.attr('category').toLowerCase());
 	item.siblings(".switch--item").each(function(index, sibling) {
-		idComponents.push($(sibling).text().toLowerCase());
+		idComponents.push($(sibling).attr('category').toLowerCase());
 	});
 	return idComponents.sort().join("-")
 }
